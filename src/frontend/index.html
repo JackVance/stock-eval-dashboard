@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy-Son Stock Evaluator</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <div class="topnav">
+        <a href="http://bigolbuffalo.com/">Big Ol' Buffalo Detector</a>
+        <a href="http://bigolbuffalo.com/EnterTheBison.html">Enter the Bison</a>
+        <a href="http://bigolbuffalo.com/BuffaloBarkMachine.html">Buffalo Bark Machine</a>
+        <a href="http://bigolbuffalo.com/Bython.html">Bython Projects</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Buy-Son (Stock Evaluation Dashboard)</h1>
+        <p class="subtitle">Serverless Edition</p>
+
+        <p>Select a company from the dropdown list, or enter your own ticker symbol.</p>
+        <p>The year range slider applies to both the price chart and annual financials.</p>
+
+        <!-- Company Selection -->
+        <h3>Company:</h3>
+        <div class="input-row">
+            <select id="company-dropdown">
+                <option value="">Loading...</option>
+            </select>
+            <input type="text" id="custom-ticker" placeholder="TICKER" maxlength="10">
+            <button id="add-ticker-btn">Add Symbol & Run</button>
+        </div>
+
+        <!-- Year Range Slider -->
+        <h3>Year(s):</h3>
+        <div class="range-slider-container">
+            <div class="range-slider">
+                <input type="range" id="range-min" min="2000" max="2026" value="2023">
+                <input type="range" id="range-max" min="2000" max="2026" value="2026">
+                <div class="slider-track"></div>
+                <div class="slider-range"></div>
+            </div>
+            <div class="range-ticks" id="range-ticks"></div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading hidden">Loading data...</div>
+        <div id="error" class="error hidden"></div>
+
+        <!-- Charts -->
+        <div id="price-chart" class="chart"></div>
+
+        <div class="two-column">
+            <div id="financials-chart" class="chart"></div>
+            <div id="info-text" class="info-panel"></div>
+        </div>
+
+        <div class="two-column">
+            <div id="balance-bar-chart" class="chart"></div>
+            <div id="balance-sunburst-chart" class="chart"></div>
+        </div>
+
+        <!-- Educational Content -->
+        <hr>
+        <div class="education">
+            <p>This dashboard is designed around a "value investing" strategy. How does the price relate to the current and anticipated future earnings of a company?</p>
+            <p>Looking at these charts, you should be able to get some idea of the recent earnings trajectory of a company, its potential for financial improvement and stability, and the relative price.</p>
+            <p>Central to this analysis is the "price-to-earnings" ratio, or P/E, which is the price per dollar of annual earnings currently offered by the stock. A PE of 1 means that your share would "earn" (though not paid to YOU) its value each year. A PE of 10 means it would earn a 100% ROI in 10 years, and so on. Of course, this must be weighed against future expectations for the company. A PE of 100 may be justified if the company can be expected to dramatically increase (~10x) earnings in the near future.</p>
+
+            <h3>Notable Terms and Definitions:</h3>
+            <p><strong>Trailing P/E:</strong> The price-to-earnings ratio calculated based on actual earnings over the past 12 months reported by the company.</p>
+            <p><strong>Forward P/E:</strong> The price-to-earnings ratio calculated based on anticipated future earnings reported by the company.</p>
+            <p><strong>EBITDA:</strong> Earnings before interest, taxes, depreciation, and amortization</p>
+            <p><strong>Cost of Revenue:</strong> Total cost of manufacturing and delivering a product or service to consumers. Used as a theoretical minimum for Total Operating expenses.</p>
+            <p><strong>Operating Income:</strong> Equivalent to Total Revenue minus Total Operating Expenses. Does NOT account for interest, taxes, or non-recurring expenses (e.g., lawsuits).</p>
+        </div>
+
+        <p class="source-link"><a href="https://github.com/your-repo/stock-eval-dashboard">Source Code</a></p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
