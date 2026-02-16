@@ -27,7 +27,7 @@ class Config:
     # SEC EDGAR - requires User-Agent with contact info per SEC guidelines
     SEC_USER_AGENT: str = os.environ.get(
         "SEC_USER_AGENT",
-        "StockDashboard/1.0 (stockdashboard@example.com)",
+        "StockDashboard/1.0 (jackvanced@gmail.com)",
     )
     SEC_BASE_URL: str = "https://data.sec.gov"
     SEC_TICKERS_URL: str = "https://www.sec.gov/files/company_tickers.json"
