@@ -91,7 +91,7 @@ class FrontendStack(Stack):
 
         frontend_path = Path(__file__).parent.parent.parent.parent / "src" / "frontend"
 
-        s3deploy.BucketDeployment(
+        deploy_frontend = s3deploy.BucketDeployment(
             self,
             "DeployFrontend",
             sources=[s3deploy.Source.asset(str(frontend_path))],
@@ -100,9 +100,10 @@ class FrontendStack(Stack):
             distribution_paths=["/*"],  # Invalidate cache on deploy
         )
 
-        # Inject runtime API URL so frontend knows where to call
+        # Inject runtime API URL so frontend knows where to call.
+        # Must run AFTER DeployFrontend to overwrite the local dev config.js.
         config_content = f"window.CONFIG = {{ API_URL: '{api_url}' }};"
-        s3deploy.BucketDeployment(
+        deploy_config = s3deploy.BucketDeployment(
             self,
             "DeployConfig",
             sources=[
@@ -111,7 +112,9 @@ class FrontendStack(Stack):
             destination_bucket=self.bucket,
             distribution=self.distribution,
             distribution_paths=["/js/config.js"],
+            prune=False,  # Don't delete other files when deploying config only
         )
+        deploy_config.node.add_dependency(deploy_frontend)
 
         CfnOutput(
             self,
