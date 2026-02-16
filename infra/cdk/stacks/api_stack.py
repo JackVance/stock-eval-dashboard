@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-from aws_cdk import CfnOutput, Duration, Stack
+from aws_cdk import BundlingOptions, CfnOutput, Duration, Stack
 from aws_cdk import aws_apigatewayv2 as apigwv2
 from aws_cdk import aws_apigatewayv2_integrations as integrations
 from aws_cdk import aws_dynamodb as dynamodb
@@ -32,12 +32,17 @@ class ApiStack(Stack):
             handler="handler.main",
             code=lambda_.Code.from_asset(
                 str(lambda_code_path),
-                bundling=lambda_.BundlingOptions(
+                bundling=BundlingOptions(
                     image=lambda_.Runtime.PYTHON_3_11.bundling_image,
+                    platform="linux/arm64",
                     command=[
                         "bash",
                         "-c",
-                        "pip install -r requirements.txt -t /asset-output && cp -au . /asset-output",
+                        "pip install -r requirements.txt "
+                        "--platform manylinux2014_aarch64 "
+                        "--only-binary=:all: "
+                        "-t /asset-output "
+                        "&& cp -r . /asset-output",
                     ],
                 ),
             ),
