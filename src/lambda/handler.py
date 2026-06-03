@@ -91,19 +91,30 @@ def handle_get_stock(event: dict[str, Any]) -> dict[str, Any]:
 
 
 def handle_get_tickers(event: dict[str, Any]) -> dict[str, Any]:
-    """GET /api/tickers — saved ticker list, falls back to defaults."""
+    """GET /api/tickers — auto-refreshed top-N (in market-cap order) followed by user-added saved tickers (alphabetical)."""
     try:
         if LOCAL_MODE:
-            tickers = list(_local_tickers)
+            return response(200, {"tickers": sorted(_local_tickers)})
+
+        top_result = table.get_item(Key={"PK": config.TOP_TICKERS_PK})
+        user_result = table.get_item(Key={"PK": config.TICKERS_PK})
+
+        # TOP_TICKERS is stored as a List (market-cap descending). Tolerate the
+        # legacy Set type in case this read happens before the next refresh runs.
+        raw_top = top_result.get("Item", {}).get("tickers", [])
+        if isinstance(raw_top, set):
+            top_tickers = sorted(raw_top)
         else:
-            result = table.get_item(Key={"PK": config.TICKERS_PK})
-            item = result.get("Item", {})
-            tickers = list(item.get("tickers", set()))
+            top_tickers = list(raw_top)
 
-        if not tickers:
-            tickers = config.DEFAULT_TICKERS
+        user_tickers = user_result.get("Item", {}).get("tickers", set())
+        user_extras = sorted(set(user_tickers) - set(top_tickers))
 
-        return response(200, {"tickers": sorted(tickers)})
+        merged = top_tickers + user_extras
+        if not merged:
+            merged = list(config.DEFAULT_TICKERS)
+
+        return response(200, {"tickers": merged})
 
     except Exception as e:
         logger.exception("Error fetching tickers")

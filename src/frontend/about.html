@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — Buy-Son Stock Evaluator</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* About-page-specific styling layered on top of the buffalo_stone theme */
+        /* Embedded in an iframe — drop the top padding that was reserved for the fixed topnav. */
+        .main-content {
+            padding-top: 20px;
+        }
+
+        .about-section {
+            margin: 40px 0;
+        }
+
+        .about-section h2 {
+            color: var(--accent-blue);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        .about-section p {
+            margin: 12px 0;
+        }
+
+        .about-section ul {
+            line-height: 1.8;
+        }
+
+        .about-section code {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: var(--accent-blue);
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 24px;
+            border-radius: 6px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .arch-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .arch-node {
+            background: rgba(131, 176, 214, 0.15);
+            border: 1px solid var(--accent-blue);
+            border-radius: 6px;
+            padding: 12px 16px;
+            text-align: center;
+            min-width: 140px;
+            font-size: 14px;
+        }
+
+        .arch-node.user {
+            background: rgba(0, 204, 150, 0.15);
+            border-color: var(--accent-green);
+        }
+
+        .arch-node.compute {
+            background: rgba(222, 59, 62, 0.15);
+            border-color: var(--accent-red-light);
+        }
+
+        .arch-node.storage {
+            background: rgba(236, 108, 91, 0.15);
+            border-color: var(--accent-red-light);
+        }
+
+        .arch-node.external {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .arch-node .node-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .arch-node .node-detail {
+            font-size: 12px;
+            opacity: 0.85;
+        }
+
+        .arrow-down {
+            font-size: 20px;
+            color: var(--accent-blue);
+            line-height: 1;
+        }
+
+        /* SVG architecture diagram */
+        .arch-svg {
+            width: 100%;
+            max-width: 820px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .arch-svg text {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .arch-svg .edge-label {
+            font-size: 11px;
+            fill: #fff;
+            opacity: 0.9;
+        }
+
+        .diagram-caption {
+            text-align: center;
+            font-size: 12px;
+            font-style: italic;
+            opacity: 0.85;
+            margin: 14px auto 0;
+            max-width: 640px;
+        }
+
+        /* Tech stack table */
+        .stack-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        .stack-table th, .stack-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .stack-table th {
+            background: rgba(0, 0, 0, 0.25);
+            color: var(--accent-blue);
+            font-size: 14px;
+        }
+
+        .stack-table tr:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .stack-table td:first-child {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* Numbered flow */
+        .flow-steps {
+            list-style: none;
+            padding: 0;
+            counter-reset: step;
+        }
+
+        .flow-steps li {
+            counter-increment: step;
+            padding: 12px 12px 12px 50px;
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.15);
+            border-left: 3px solid var(--accent-blue);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .flow-steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+            opacity: 0.85;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>About This Dashboard</h1>
+        <p class="subtitle">How Buy-Son works under the hood</p>
+
+        <div class="about-section">
+            <h2>What This Is</h2>
+            <p>
+                Buy-Son is a serverless stock-evaluation dashboard built around a "value investing" lens —
+                it pulls multi-year price history, company fundamentals, and full balance sheets for any
+                US-listed ticker and renders them as interactive Plotly charts in your browser.
+            </p>
+            <p>
+                Nothing is precomputed. When you select a ticker, a request goes out to AWS, which then
+                queries third-party data sources live and returns a single JSON payload. The charts are
+                rendered client-side, so panning, zooming, and tooltips are instant once data arrives.
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h2>Architecture at a Glance</h2>
+            <div class="arch-diagram">
+                <svg class="arch-svg" viewBox="0 0 840 490" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Architecture diagram. Route 53 is a side branch for DNS only. CloudFront and S3 are a separate static-file path. The main API flow goes from browser straight to API Gateway to Lambda and out to external data sources.">
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto-start-reverse" markerUnits="strokeWidth">
+                            <path d="M0,0 L10,5 L0,10 Z" fill="#83B0D6" />
+                        </marker>
+                    </defs>
+
+                    <!-- Edges (all bidirectional) -->
+
+                    <!-- 1. Browser <-> DNS (one-time lookups for both custom domain and API Gateway domain) -->
+                    <line x1="325" y1="50" x2="235" y2="50" stroke="#83B0D6" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+                    <text class="edge-label" x="280" y="42" text-anchor="middle">1. DNS lookup</text>
+
+                    <!-- 2. Browser <-> CloudFront (static-file HTTPS, side branch on right) -->
+                    <line x1="495" y1="50" x2="615" y2="50" stroke="#83B0D6" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+                    <text class="edge-label" x="555" y="42" text-anchor="middle">2. HTTPS (static)</text>
+
+                    <!-- 2a. CloudFront <-> S3 (origin pull on cache miss) -->
+                    <line x1="700" y1="85" x2="700" y2="155" stroke="#83B0D6" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+                    <text class="edge-label" x="710" y="125">2a. static files (cached)</text>
+
+                    <!-- 3. Browser <-> API Gateway (HTTPS for /api/*, bypasses CloudFront entirely) -->
+                    <line x1="410" y1="85" x2="410" y2="155" stroke="#83B0D6" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+                    <text class="edge-label" x="420" y="125">3. HTTPS (/api/*)</text>
+
+                    <!-- 4. API Gateway <-> Lambda -->
+                    <line x1="410" y1="225" x2="410" y2="275" stroke="#83B0D6" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+                    <text class="edge-label" x="420" y="253">4. invoke / JSON response</text>
+
+                    <!-- 5a. Lambda <-> yfinance (fan-out, down-left) -->
+                    <line x1="360" y1="345" x2="210" y2="395" stroke="#83B0D6" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+                    <text class="edge-label" x="175" y="370" text-anchor="end">5a. prices + info</text>
+
+                    <!-- 5b. Lambda <-> SEC EDGAR (fan-out, straight down) -->
+                    <line x1="410" y1="345" x2="410" y2="395" stroke="#83B0D6" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+                    <text class="edge-label" x="420" y="375">5b. 10-K filings</text>
+
+                    <!-- 5c. Lambda <-> DynamoDB (fan-out, down-right) -->
+                    <line x1="460" y1="345" x2="615" y2="395" stroke="#83B0D6" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+                    <text class="edge-label" x="645" y="370" text-anchor="start">5c. tickers (read / write)</text>
+
+                    <!-- Nodes -->
+                    <!-- DNS Lookup (side branch left of Browser - shows both lookups happening at page load) -->
+                    <g>
+                        <rect x="70" y="20" width="160" height="60" rx="6" fill="#83B0D6" fill-opacity="0.15" stroke="#83B0D6" stroke-width="1.5" />
+                        <text x="150" y="38" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">DNS Lookup</text>
+                        <text x="150" y="55" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">Route 53 (S3/static)</text>
+                        <text x="150" y="70" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">AWS DNS (API Gateway)</text>
+                    </g>
+
+                    <!-- Browser (client, center) -->
+                    <g>
+                        <rect x="330" y="20" width="160" height="60" rx="6" fill="#00CC96" fill-opacity="0.15" stroke="#00CC96" stroke-width="1.5" />
+                        <text x="410" y="46" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">Your Browser</text>
+                        <text x="410" y="65" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">HTML / CSS / JS + Plotly.js</text>
+                    </g>
+
+                    <!-- CloudFront (routing, side branch right of Browser) -->
+                    <g>
+                        <rect x="620" y="20" width="160" height="60" rx="6" fill="#83B0D6" fill-opacity="0.15" stroke="#83B0D6" stroke-width="1.5" />
+                        <text x="700" y="46" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">CloudFront CDN</text>
+                        <text x="700" y="65" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">HTTPS + edge caching</text>
+                    </g>
+
+                    <!-- API Gateway (routing, main column under Browser) -->
+                    <g>
+                        <rect x="330" y="160" width="160" height="60" rx="6" fill="#83B0D6" fill-opacity="0.15" stroke="#83B0D6" stroke-width="1.5" />
+                        <text x="410" y="186" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">API Gateway</text>
+                        <text x="410" y="205" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">HTTP API, /api/*</text>
+                    </g>
+
+                    <!-- S3 (storage, under CloudFront in static-file branch) -->
+                    <g>
+                        <rect x="620" y="160" width="160" height="60" rx="6" fill="#EC6C5B" fill-opacity="0.15" stroke="#EC6C5B" stroke-width="1.5" />
+                        <text x="700" y="186" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">S3 Bucket</text>
+                        <text x="700" y="205" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">Static frontend files</text>
+                    </g>
+
+                    <!-- Lambda (compute) -->
+                    <g>
+                        <rect x="330" y="280" width="160" height="60" rx="6" fill="#DE3B3E" fill-opacity="0.18" stroke="#EC6C5B" stroke-width="1.5" />
+                        <text x="410" y="306" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">AWS Lambda</text>
+                        <text x="410" y="325" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">Python 3.11, ARM64</text>
+                    </g>
+
+                    <!-- yfinance (external, fan-out left) -->
+                    <g>
+                        <rect x="70" y="400" width="160" height="60" rx="6" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.5" />
+                        <text x="150" y="426" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">yfinance</text>
+                        <text x="150" y="445" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">Yahoo Finance API</text>
+                    </g>
+
+                    <!-- SEC EDGAR (external, fan-out center) -->
+                    <g>
+                        <rect x="330" y="400" width="160" height="60" rx="6" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.5" />
+                        <text x="410" y="426" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">SEC EDGAR</text>
+                        <text x="410" y="445" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">data.sec.gov</text>
+                    </g>
+
+                    <!-- DynamoDB (storage, fan-out right) -->
+                    <g>
+                        <rect x="620" y="400" width="160" height="60" rx="6" fill="#EC6C5B" fill-opacity="0.15" stroke="#EC6C5B" stroke-width="1.5" />
+                        <text x="700" y="426" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">DynamoDB</text>
+                        <text x="700" y="445" fill="#fff" fill-opacity="0.85" font-size="11" text-anchor="middle">Saved ticker list</text>
+                    </g>
+                </svg>
+            </div>
+            <div class="legend">
+                <span class="legend-item"><span class="legend-swatch" style="background:rgba(0,204,150,0.15);border-color:var(--accent-green);"></span> Client</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:rgba(131,176,214,0.15);border-color:var(--accent-blue);"></span> AWS edge / routing</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:rgba(222,59,62,0.15);border-color:var(--accent-red-light);"></span> Compute</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:rgba(236,108,91,0.15);border-color:var(--accent-red-light);"></span> Storage</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.4);"></span> External data</span>
+            </div>
+            <p class="diagram-caption">Every line is bidirectional &mdash; requests go out, responses return the same way. DNS lookups happen once at page load (Route 53 resolves the custom domain to CloudFront; AWS-managed DNS resolves the API Gateway domain). API calls bypass CloudFront entirely, so Lambda responses travel back as: Lambda &rarr; API Gateway &rarr; Browser.</p>
+        </div>
+
+        <div class="about-section">
+            <h2>What Happens When You Click "Add Symbol &amp; Run"</h2>
+            <ol class="flow-steps">
+                <li>
+                    The browser sends an HTTPS request to <code>/api/stock/{ticker}</code> with your
+                    selected start and end years.
+                </li>
+                <li>
+                    The request goes <strong>directly to API Gateway</strong>, not through CloudFront &mdash;
+                    the API Gateway URL is baked into <code>config.js</code> at deploy time. API Gateway
+                    then invokes the Lambda function. (Static files like HTML, CSS, and JS take a separate
+                    path: browser &rarr; CloudFront &rarr; S3, edge-cached, and never reach Lambda.)
+                </li>
+                <li>
+                    Lambda fans out to two external sources in parallel: <strong>yfinance</strong>
+                    (Yahoo Finance) for daily OHLC prices and current company info, and
+                    <strong>SEC EDGAR</strong> for 10+ years of annual financial statements and balance
+                    sheets pulled directly from SEC filings.
+                </li>
+                <li>
+                    Lambda computes 50-day and 200-day moving averages on the price series, normalizes
+                    fields across the two providers, and merges everything into a single JSON response.
+                </li>
+                <li>
+                    The browser receives the payload and hands it to <strong>Plotly.js</strong>, which
+                    renders five interactive charts: price + moving averages, volume, financial timeline,
+                    company info panel, and a balance sheet (bar chart + sunburst).
+                </li>
+                <li>
+                    Saved tickers in the dropdown come from a separate <code>/api/tickers</code> call
+                    that reads a single record out of DynamoDB.
+                </li>
+            </ol>
+        </div>
+
+        <div class="about-section">
+            <h2>Where the Computation Happens</h2>
+            <p>
+                Almost all of the heavy lifting happens in two places:
+            </p>
+            <ul>
+                <li>
+                    <strong>AWS Lambda (server-side):</strong> Fetches data from external APIs,
+                    calculates moving averages, normalizes inconsistent field names across providers,
+                    and shapes the response. Runs on Python 3.11 / ARM64, cold-starts in 1–3 seconds.
+                </li>
+                <li>
+                    <strong>Your browser (client-side):</strong> Plotly.js handles all rendering,
+                    interactivity (pan, zoom, tooltips, legend toggles), and the dual-handle year-range
+                    slider. No data is persisted client-side — refresh the page and everything reloads
+                    from the API.
+                </li>
+            </ul>
+            <p>
+                The dashboard intentionally does <em>not</em> store historical price data. Every chart
+                you see was fetched live from the source within the last few seconds.
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h2>Where the Data Comes From</h2>
+            <table class="stack-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Source</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Daily prices (OHLC + volume)</td>
+                        <td>Yahoo Finance via <code>yfinance</code></td>
+                        <td>Adjusted for splits and dividends</td>
+                    </tr>
+                    <tr>
+                        <td>Moving averages (50-day, 200-day)</td>
+                        <td>Computed in Lambda</td>
+                        <td>Rolling mean over the price series</td>
+                    </tr>
+                    <tr>
+                        <td>Company info, market cap, P/E ratios</td>
+                        <td>Yahoo Finance via <code>yfinance</code></td>
+                        <td>Trailing + forward P/E, EBITDA, debt</td>
+                    </tr>
+                    <tr>
+                        <td>Annual financial statements (10+ years)</td>
+                        <td>SEC EDGAR (data.sec.gov)</td>
+                        <td>Pulled directly from 10-K filings</td>
+                    </tr>
+                    <tr>
+                        <td>Balance sheets</td>
+                        <td>SEC EDGAR</td>
+                        <td>Detailed line items for sunburst chart</td>
+                    </tr>
+                    <tr>
+                        <td>Saved ticker dropdown</td>
+                        <td>DynamoDB</td>
+                        <td>Single record keyed by <code>PK = "TICKERS"</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="about-section">
+            <h2>Tech Stack</h2>
+            <table class="stack-table">
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Tools</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Frontend</td>
+                        <td>Vanilla HTML / CSS / JavaScript, <a href="https://plotly.com/javascript/" target="_blank" rel="noopener">Plotly.js</a></td>
+                    </tr>
+                    <tr>
+                        <td>Backend runtime</td>
+                        <td>Python 3.11 on AWS Lambda (ARM64 / Graviton)</td>
+                    </tr>
+                    <tr>
+                        <td>Data libraries</td>
+                        <td><code>yfinance</code>, <code>requests</code> (SEC EDGAR), <code>pandas</code>, <code>numpy</code></td>
+                    </tr>
+                    <tr>
+                        <td>API layer</td>
+                        <td>AWS API Gateway (HTTP API)</td>
+                    </tr>
+                    <tr>
+                        <td>Storage</td>
+                        <td>Amazon DynamoDB (on-demand), Amazon S3</td>
+                    </tr>
+                    <tr>
+                        <td>CDN / DNS / TLS</td>
+                        <td>CloudFront, Route 53, AWS Certificate Manager</td>
+                    </tr>
+                    <tr>
+                        <td>Infrastructure as code</td>
+                        <td>AWS CDK (Python) — three stacks: Storage, Api, Frontend</td>
+                    </tr>
+                    <tr>
+                        <td>Testing</td>
+                        <td><code>pytest</code>, <code>moto</code> (DynamoDB mocking), <code>ruff</code>, <code>mypy</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="about-section">
+            <h2>Hosting &amp; Cost</h2>
+            <p>
+                The entire stack runs comfortably within AWS free-tier limits at the dashboard's
+                expected usage (single-digit requests per day). Estimated cost: <strong>~$0/month</strong>,
+                with ECR image storage being the only meaningful charge after free-tier expiration
+                (~$0.02/month for the ~200 MB Lambda container image).
+            </p>
+            <p>
+                Because the architecture is serverless, there are no servers to keep running between
+                requests — Lambda spins up on demand and tears down when idle.
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>

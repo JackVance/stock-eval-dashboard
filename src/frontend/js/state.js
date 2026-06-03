@@ -8,14 +8,15 @@ const State = {
     stockData: null,
 
     setTickers(tickers) {
-        this.tickers = tickers.sort();
+        // Preserve server-side order: auto top-N comes back in market-cap descending,
+        // followed by user-added tickers alphabetically.
+        this.tickers = [...tickers];
     },
 
     addTicker(ticker) {
         const upperTicker = ticker.toUpperCase().trim();
         if (upperTicker && !this.tickers.includes(upperTicker)) {
             this.tickers.push(upperTicker);
-            this.tickers.sort();
             return true;
         }
         return false;

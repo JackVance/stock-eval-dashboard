@@ -1,4 +1,5 @@
 """Frontend stack: S3 bucket, CloudFront distribution, Route 53 DNS."""
+import hashlib
 from pathlib import Path
 
 from aws_cdk import CfnOutput, RemovalPolicy, Stack
@@ -102,7 +103,20 @@ class FrontendStack(Stack):
 
         # Inject runtime API URL so frontend knows where to call.
         # Must run AFTER DeployFrontend to overwrite the local dev config.js.
-        config_content = f"window.CONFIG = {{ API_URL: '{api_url}' }};"
+        # The frontend-folder hash in the comment ensures CDK detects a change
+        # to this BucketDeployment whenever DeployFrontend's source changes —
+        # otherwise CDK skips re-running this step and the dev localhost
+        # config.js (uploaded by DeployFrontend) stays live on S3.
+        frontend_hasher = hashlib.sha256()
+        for fp in sorted(frontend_path.rglob("*")):
+            if fp.is_file():
+                frontend_hasher.update(fp.read_bytes())
+        frontend_hash = frontend_hasher.hexdigest()[:12]
+
+        config_content = (
+            f"// build {frontend_hash}\n"
+            f"window.CONFIG = {{ API_URL: '{api_url}' }};"
+        )
         deploy_config = s3deploy.BucketDeployment(
             self,
             "DeployConfig",
