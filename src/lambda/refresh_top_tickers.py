@@ -1,11 +1,11 @@
 """Weekly cron: refresh the TOP_TICKERS DynamoDB record with top-N by market cap."""
+
 import json
 import logging
 from typing import Any
 
 import boto3
 import yfinance as yf
-
 from config import config
 
 logging.basicConfig(level=config.LOG_LEVEL)
@@ -48,8 +48,7 @@ def main(event: dict[str, Any], context: Any) -> dict[str, Any]:
     top_tickers = [t for t, _ in top]
 
     logger.info(
-        f"Top {len(top_tickers)} by market cap: "
-        + ", ".join(f"{t}=${c:,}" for t, c in top)
+        f"Top {len(top_tickers)} by market cap: " + ", ".join(f"{t}=${c:,}" for t, c in top)
     )
 
     # Store as a List (not Set) so the market-cap descending order is preserved.

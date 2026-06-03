@@ -1,4 +1,5 @@
 """Configuration loaded from environment variables."""
+
 import os
 
 
@@ -29,18 +30,73 @@ class Config:
     # always inside this set even after multi-year reshuffling.
     CANDIDATE_TICKERS: list[str] = [
         # Mega-cap tech
-        "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "TSLA",
-        "AVGO", "ORCL", "ADBE", "CRM", "NFLX", "AMD", "INTC", "CSCO",
-        "QCOM", "TXN", "IBM", "NOW", "INTU",
+        "AAPL",
+        "MSFT",
+        "GOOGL",
+        "AMZN",
+        "NVDA",
+        "META",
+        "TSLA",
+        "AVGO",
+        "ORCL",
+        "ADBE",
+        "CRM",
+        "NFLX",
+        "AMD",
+        "INTC",
+        "CSCO",
+        "QCOM",
+        "TXN",
+        "IBM",
+        "NOW",
+        "INTU",
         # Financial
-        "BRK-B", "JPM", "V", "MA", "BAC", "WFC", "GS", "MS", "AXP", "BLK",
+        "BRK-B",
+        "JPM",
+        "V",
+        "MA",
+        "BAC",
+        "WFC",
+        "GS",
+        "MS",
+        "AXP",
+        "BLK",
         # Healthcare
-        "LLY", "UNH", "JNJ", "ABBV", "MRK", "PFE", "TMO", "ABT", "DHR", "AMGN",
+        "LLY",
+        "UNH",
+        "JNJ",
+        "ABBV",
+        "MRK",
+        "PFE",
+        "TMO",
+        "ABT",
+        "DHR",
+        "AMGN",
         # Consumer
-        "WMT", "COST", "HD", "PG", "KO", "PEP", "MCD", "NKE", "SBUX", "DIS",
+        "WMT",
+        "COST",
+        "HD",
+        "PG",
+        "KO",
+        "PEP",
+        "MCD",
+        "NKE",
+        "SBUX",
+        "DIS",
         # Industrial / Energy / Other
-        "XOM", "CVX", "GE", "CAT", "UNP", "BA", "RTX", "HON", "LMT", "T",
-        "VZ", "CMCSA", "LIN",
+        "XOM",
+        "CVX",
+        "GE",
+        "CAT",
+        "UNP",
+        "BA",
+        "RTX",
+        "HON",
+        "LMT",
+        "T",
+        "VZ",
+        "CMCSA",
+        "LIN",
     ]
 
     # Data fetching

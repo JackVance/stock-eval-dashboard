@@ -1,4 +1,5 @@
 """Routes HTTP API Gateway events to stock data handlers."""
+
 import json
 import logging
 import os
@@ -7,6 +8,7 @@ from datetime import date
 from typing import Any
 
 from config import config
+
 from providers import CompositeProvider
 
 logging.basicConfig(level=config.LOG_LEVEL)
@@ -20,6 +22,7 @@ if LOCAL_MODE:
     table = None
 else:
     import boto3
+
     dynamodb = boto3.resource("dynamodb")
     table = dynamodb.Table(config.TABLE_NAME)
 
@@ -94,23 +97,24 @@ def handle_get_tickers(event: dict[str, Any]) -> dict[str, Any]:
     """GET /api/tickers — auto-refreshed top-N (in market-cap order) followed by user-added saved tickers (alphabetical)."""
     try:
         if LOCAL_MODE:
-            return response(200, {"tickers": sorted(_local_tickers)})
-
-        top_result = table.get_item(Key={"PK": config.TOP_TICKERS_PK})
-        user_result = table.get_item(Key={"PK": config.TICKERS_PK})
-
-        # TOP_TICKERS is stored as a List (market-cap descending). Tolerate the
-        # legacy Set type in case this read happens before the next refresh runs.
-        raw_top = top_result.get("Item", {}).get("tickers", [])
-        if isinstance(raw_top, set):
-            top_tickers = sorted(raw_top)
+            merged: list[str] = sorted(_local_tickers)
         else:
-            top_tickers = list(raw_top)
+            top_result = table.get_item(Key={"PK": config.TOP_TICKERS_PK})
+            user_result = table.get_item(Key={"PK": config.TICKERS_PK})
 
-        user_tickers = user_result.get("Item", {}).get("tickers", set())
-        user_extras = sorted(set(user_tickers) - set(top_tickers))
+            # TOP_TICKERS is stored as a List (market-cap descending). Tolerate the
+            # legacy Set type in case this read happens before the next refresh runs.
+            raw_top = top_result.get("Item", {}).get("tickers", [])
+            if isinstance(raw_top, set):
+                top_tickers = sorted(raw_top)
+            else:
+                top_tickers = list(raw_top)
 
-        merged = top_tickers + user_extras
+            user_tickers = user_result.get("Item", {}).get("tickers", set())
+            user_extras = sorted(set(user_tickers) - set(top_tickers))
+
+            merged = top_tickers + user_extras
+
         if not merged:
             merged = list(config.DEFAULT_TICKERS)
 
